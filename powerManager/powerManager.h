@@ -3,6 +3,8 @@
 
 #include <sys/types.h>
 
+typedef uint16_t power_t; // 255 W max, use uint16_t if more
+
 extern volatile uint8_t voltage; // in V/10
 extern volatile uint8_t current; // in A/10
 extern volatile int8_t mppt_direction; // +2 if increasing, -2 if decreasing
@@ -28,10 +30,9 @@ void powerManager_dispatchPower(
 
 // ==================== module motorControl ==========================================
 
-void powerManager_setMotorPower(int16_t leftPower, int16_t rightPower);
-
 // Implementation
 
-void setPower(bool left, int16_t power);
+void powerManager_setMotorPower_setup();
+void powerManager_setMotorPower(bool left, int16_t power);
 
 #endif // _POWER_MANAGER_H_

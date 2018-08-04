@@ -16,9 +16,10 @@ void powerManager_loop(uint8_t v, uint8_t i) {
   powerManager_dispatchPower(powerBudget, 0, 0, l, r);
   leftPower = l;
   rightPower = r;
-  //  powerSetMotor(l, r);
+  powerManager_setMotorPower(true, l);
 }
 
 void powerManager_setup() {
   powerManager_impl_setup();
+  powerManager_setMotorPower_setup();
 }

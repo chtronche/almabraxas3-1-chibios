@@ -124,6 +124,7 @@ CPPSRC = \
 	powerManager/powerManager_getPowerBudget.cpp \
 	powerManager/powerManager.cpp \
 	powerManager/powerManager_impl.cpp \
+	powerManager/powerManager_setMotorPower_impl.cpp \
 	reporting/reporting.cpp \
 	reporting/reporting_impl.cpp \
 	reporting/reporting_debug.cpp \
