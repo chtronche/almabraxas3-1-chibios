@@ -1,0 +1,22 @@
+Code organization:
+
+Modules and submodules are nested directories. For example, we have 3
+modules: navigator, powerManager and report. powerManager has 2
+submodules: powerComputer and motorControl, each of them is a subdir
+(unfortunately C++ barely enables to do better for now, except by
+using highly idiosyncretic namespaces).
+
+Everything that is OS-dependent is put in an _impl.cc files, and the
+_impl.h describes the API, that is the link between OS independent and
+OS-dependent stuff. For example, powerComputer_impl has a
+readVoltageAndCurrent function, meaning the OS-independent part
+communicates with the OS-dependant part through this function. In
+other words, all you would have to do to port the code to another OS
+is to rewrite the functions described in _impl.h. But beware that
+parallel threads are buried deep inside the _impl files, so it's not
+enough to have another OS, it must have the right capabilities (in
+particular multi tasking).
+
+Some _impl files have an associated _calibrate file, which contains
+the calibration parameters, usually measured on a particular hardware.
+

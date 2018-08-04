@@ -1,0 +1,72 @@
+digraph name {
+
+node [shape=rectangle];
+
+powerManager [shape=component,label="powerManager
+freq: 100 Hz
+Sampling freq: 5 kHz"];
+
+powerManager_byProduct [shape=record,style=filled,
+label="{voltage|current|mppt direction|powerBudget|left power|right power}|
+{V/10|A/10|+/-|PWM unit (even)|PWM|PWM}|
+{uint8_t|uint8_t|int8_t (+1/-1)|uin16t_t|int16_t|int16_t}"];
+
+ADC [shape=ellipse, label="ADC x 2"];
+ADC -> powerManager;
+
+powerManager -> powerManager_byProduct;
+
+UART1 [shape=ellipse,label="UART1\n(GPS)"];
+UART1 -> navigator;
+
+navigator [shape=component,label="navigator
+freq: GPS clocked"];
+
+headingData [shape=record,
+label="{heading|Target heading}|{circ % 256|circ % 256}|{uint8_t|uint8_t}"];
+
+navigator -> headingData;
+
+navigator -> navigator_byProduct;
+
+compass [shape=ellipse,label="compass\n(I2C)"];
+compass -> navigator;
+
+navigator_byProduct [shape=record,style=filled,
+label="{lat|lon|Distance from last point|heading source (GPS / compass)|
+next WP #|next WP lat|next WP lon|timestamp}|
+
+{deg x 2^^20|deg x 2^^20|m|bool|
+|deg/100|deg/100|s since 2000}|
+
+{uint32_t|uint32_t|uint32_t|uint8_t|
+uint16_t|uint16_t|uint16_t|uint32_t}
+"];
+
+PWM [shape=ellipse,label="PWM x 2"];
+powerManager -> PWM;
+
+headingData -> powerManager;
+
+{rank=same; navigator,headingData,powerManager,PWM};
+//{rank=same; PWM,skipper,skipper_byProduct};
+//{rank=same; UART2,RFM69,navigator,navigator_byProduct};
+
+////////////////////////////////////////////////////////////////////////////////
+
+reporting [shape=component,style=dashed,
+	   label="reporting / master\nfreq: 1Hz radio, 1/3600 Hz satellite"];
+
+UART3 [shape=ellipse,label="Satellite modem\n(UART3)"];
+UART3 -> reporting [dir=both];
+
+RFM69 [shape=ellipse,label="RFM69\n(SPI + 2 PAL)"];
+RFM69 -> reporting [dir=both];
+
+SDcard [shape=ellipse,label="SDcard\n(SPI)"];
+reporting -> SDcard;
+
+UART2 [shape=ellipse,label="debug\n(UART2)"];
+reporting -> UART2;
+
+}
