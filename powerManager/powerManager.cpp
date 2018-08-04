@@ -10,9 +10,13 @@ void powerManager_loop(uint8_t v, uint8_t i) {
   voltage = v;
   current = i;
   if (++n < 150) return; // check only every ~1s during debug
+  n = 0;
   powerManager_getPowerBudget(v, i);
-  //  powerDispatch(powerBudget, heading, targetHeading, leftPower, rightPower);
-  //  powerSetMotor(leftPower, rightPower);
+  int16_t l, r;
+  powerManager_dispatchPower(powerBudget, 0, 0, l, r);
+  leftPower = l;
+  rightPower = r;
+  //  powerSetMotor(l, r);
 }
 
 void powerManager_setup() {

@@ -120,6 +120,7 @@ CSRC = $(STARTUPSRC) \
 CPPSRC = \
 	main.cpp \
 	main_impl.cpp \
+	powerManager/powerManager_dispatchPower.cpp \
 	powerManager/powerManager_getPowerBudget.cpp \
 	powerManager/powerManager.cpp \
 	powerManager/powerManager_impl.cpp \
