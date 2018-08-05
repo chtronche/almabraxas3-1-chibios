@@ -12,9 +12,14 @@ power_t peakPower = 0;
 
 volatile uint16_t powerBudget = 0; // in PWM units
 
-// aka MPPT
+static void decreasePeakPower() {
+  if (peakPower >= 100) 
+    peakPower -= 100; // = 1 W
+  else
+    peakPower = 0;
+}
 
-#define HYSTERESIS (200) // mW
+// aka MPPT
 
 void powerManager_getPowerBudget(uint8_t voltage, uint8_t current) {
   if (voltage < 75) {
@@ -42,10 +47,7 @@ void powerManager_getPowerBudget(uint8_t voltage, uint8_t current) {
       // Go on
     } else {
       mppt_direction = -mppt_direction;
-      if (peakPower >= 100) 
-	peakPower -= 100; // mW
-      else
-	peakPower = 0;
+      decreasePeakPower();
     }
   } else {
     // Descending
@@ -53,10 +55,7 @@ void powerManager_getPowerBudget(uint8_t voltage, uint8_t current) {
       peakPower = power;
       mppt_direction = -mppt_direction;
     } else {
-      if (peakPower >= 100) 
-	peakPower -= 100;
-      else
-	peakPower = 0;
+      decreasePeakPower();
     }
   }
   powerBudget += mppt_direction;
