@@ -21,5 +21,6 @@ void reporting_debug_loop();
 
 void reporting_debug_impl_setup();
 void reporting_debug_print(const char *);
+const char *reporting_debug_readCommand();
 
 #endif // _REPORTING_H_

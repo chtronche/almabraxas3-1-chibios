@@ -122,6 +122,7 @@ CSRC = $(STARTUPSRC) \
 # C++ sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.
 CPPSRC = \
+	commander/commander.cpp \
 	main.cpp \
 	main_impl.cpp \
 	powerManager/powerManager_dispatchPower.cpp \
@@ -162,7 +163,7 @@ ASMXSRC = $(STARTUPASM) $(PORTASM) $(OSALASM)
 INCDIR = $(CHIBIOS)/os/license \
          $(STARTUPINC) $(KERNINC) $(PORTINC) $(OSALINC) \
          $(HALINC) $(PLATFORMINC) $(BOARDINC) \
-	powerManager reporting utils
+	commander powerManager reporting utils
 
 #
 # Project, sources and paths

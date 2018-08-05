@@ -2,6 +2,7 @@
 // (c) Ch. Tronche 2018 (ch@tronche.com)
 // MIT License
 
+#include <stdio.h>
 #include <string.h>
 
 #include "hal.h"
@@ -33,3 +34,32 @@ void reporting_debug_print(const char *buffer) {
   sdWrite(&ALMA_DEBUG_PORT, (uint8_t *)buffer, strlen(buffer));
 }
 
+static char command[64];
+static char *commandP;
+static bool clearBuffer = true;
+
+const char *reporting_debug_readCommand() {
+  if (clearBuffer) {
+    commandP = command;
+    clearBuffer = false;
+  }
+  int commandRoomAvailable = 63 - (commandP - command);
+  for(;;) {
+    
+    if (sdGetWouldBlock(&ALMA_DEBUG_PORT)) return NULL;
+    if (!commandRoomAvailable) {
+      // discard command line too long
+      clearBuffer = true;
+      return NULL;
+    }
+    char c = sdGet(&ALMA_DEBUG_PORT);
+    if (c == '\r') continue;
+    if (c == '\n') {
+      *commandP = '\0';
+      clearBuffer = true;
+      return command;
+    }
+    *commandP++ = c;
+    --commandRoomAvailable;
+  }
+}
