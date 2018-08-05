@@ -12,6 +12,8 @@ power_t peakPower = 0;
 
 volatile uint16_t powerBudget = 0; // in PWM units
 
+bool mpptOn = true;
+
 static void decreasePeakPower() {
   if (peakPower >= 100) 
     peakPower -= 100; // = 1 W
@@ -22,6 +24,7 @@ static void decreasePeakPower() {
 // aka MPPT
 
 void powerManager_getPowerBudget(uint8_t voltage, uint8_t current) {
+  if (!mpptOn) return;
   if (voltage < 75) {
     powerBudget = peakPower = 0;
     mppt_direction = 2;

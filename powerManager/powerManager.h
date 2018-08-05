@@ -15,6 +15,8 @@ extern volatile int8_t mppt_direction; // +2 if increasing, -2 if decreasing
 extern volatile uint16_t powerBudget;
 extern volatile int16_t leftPower, rightPower;
 
+extern bool mpptOn; // false to set powerBudget manually
+
 void powerManager_setup();
 void powerManager_loop(uint8_t v, uint8_t i);
 
