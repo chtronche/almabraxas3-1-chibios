@@ -1,22 +1,51 @@
-Code organization:
+// Part of the Almabraxas 3-1 project https://tronche.com/wiki/
+// (c) Ch. Tronche 2018 (ch@tronche.com)
+// MIT License
+
+========= General Organization ========
+(see also description.dot)
+
+At high level there are 3 "tasks" (in the functionnal sense) to do:
+1) Navigator
+	a) read GPS -> gives lat / lon and timestamp and distance on the x s.
+	b) compute current heading (using compass if GPS data unsufficient, e.g. distance too
+	   short = we're drifting) -> gives distance from last point and heading source. (NB:
+	   North used are different since GPS reports true North, while compass reports magnetic
+	   North, so this method can't be used to navigate, say, above the 80th parallel).
+	c) find next waypoint -> gives next WP #, lat, lon
+	d) compute target heading
+
+2) power manager
+	a) reads voltage / current, compute power
+		a.1) if voltage below threshold, cut power immediately
+	b) apply MPPT algorithm -> gives powerBudget
+	c) dispatch powerBudget between motors, given heading / target heading difference
+
+3) Reporting. Also accepts commands from GPS / satellites
+
+Tasks frequencies:
+  navigator: (clocked by GPS UART, 1Hz), read GPS and compass
+  powerManager: 5 kHz sampling, 10Hz computing, read ADC, write to PWM
+  Reporting : 1Hz on radio, 1/3600 Hz on satellite, read/write to SPI+PAL (radio) and UART
+             (satellite modem)
+
+Shared variables: heading and target heading, written by navigator, read by powerManager. 8bit values not protected by mutexes.
+
+All "reports" variables, protected by one mutex per writer (navigator or powerManager).
+
+========= Code organization ===========
+
+Most of the code organization is a work around for C++ lack of module.
 
 Modules and submodules are nested directories. For example, we have 3
-modules: navigator, powerManager and report. powerManager has 2
-submodules: powerComputer and motorControl, each of them is a subdir
-(unfortunately C++ barely enables to do better for now, except by
-using highly idiosyncretic namespaces).
+modules: navigator, powerManager and report. 
 
-Everything that is OS-dependent is put in an _impl.cc files, and the
-_impl.h describes the API, that is the link between OS independent and
-OS-dependent stuff. For example, powerComputer_impl has a
-readVoltageAndCurrent function, meaning the OS-independent part
-communicates with the OS-dependant part through this function. In
-other words, all you would have to do to port the code to another OS
-is to rewrite the functions described in _impl.h. But beware that
-parallel threads are buried deep inside the _impl files, so it's not
-enough to have another OS, it must have the right capabilities (in
-particular multi tasking).
+Everything that is OS-dependent is put in an _impl.cc files.  In other
+words, all you would have to do to port the code to another OS / system is to
+rewrite the functions described in _impl.h. But beware that parallel
+threads are buried deep inside the _impl files, so it's not enough to
+have another OS, it must have the right capabilities (in particular
+multi tasking).
 
 Some _impl files have an associated _calibrate file, which contains
 the calibration parameters, usually measured on a particular hardware.
-

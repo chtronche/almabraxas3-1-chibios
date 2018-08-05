@@ -1,3 +1,7 @@
+// Part of the Almabraxas 3-1 project https://tronche.com/wiki/
+// (c) Ch. Tronche 2018 (ch@tronche.com)
+// MIT License
+
 #include "LinearMapper.h"
 
 LinearMapper::LinearMapper(int from0, float to0, int from1, float to1) {

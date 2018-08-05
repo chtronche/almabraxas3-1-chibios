@@ -1,3 +1,8 @@
+// Part of the Almabraxas 3-1 project https://tronche.com/wiki/
+// (c) Ch. Tronche 2018 (ch@tronche.com)
+// MIT License
+// For the ChibiOs part, (c) Giovanni Di Sirio:
+
 /*
     ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
@@ -13,17 +18,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
-/**
- * @file    templates/chconf.h
- * @brief   Configuration file template.
- * @details A copy of this file must be placed in each project directory, it
- *          contains the application specific kernel settings.
- *
- * @addtogroup config
- * @details Kernel related settings and hooks.
- * @{
- */
 
 #ifndef CHCONF_H
 #define CHCONF_H

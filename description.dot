@@ -1,3 +1,9 @@
+// Part of the Almabraxas 3-1 project https://tronche.com/wiki/
+// (c) Ch. Tronche 2018 (ch@tronche.com)
+// MIT License
+// Schema of the software architecture
+// This is a .dot file, try visualizing it with xdot or compatible viewers
+
 digraph name {
 
 node [shape=rectangle];

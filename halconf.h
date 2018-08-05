@@ -1,3 +1,8 @@
+// Part of the Almabraxas 3-1 project https://tronche.com/wiki/
+// (c) Ch. Tronche 2018 (ch@tronche.com)
+// MIT License
+// For the ChibiOs part, (c) Giovanni Di Sirio:
+
 /*
     ChibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
 
